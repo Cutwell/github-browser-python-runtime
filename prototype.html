@@ -88,22 +88,30 @@
 
     <style>
         .browser-python-header {
-            background-color: rgba(234, 238, 242, 0.5);
+            display: flex !important;
+            padding-bottom: 8px !important;
+            padding-top: 8px !important;
+            padding-right: 8px !important;
+            flex-direction: row !important;
+
+            flex-shrink: 0 !important;
+            align-items: center !important;
+            background-color: #f6f8fa;
             border: 1px solid #d0d7de;
             border-top-left-radius: 6px;
             border-top-right-radius: 6px;
             margin: -1px -1px 0;
             padding: 16px;
             box-sizing: border-box;
-            display: block;
-            overflow: hidden;
-            word-wrap: break-word;
-            font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+            color: #24292f;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI Variable, Segoe UI, system-ui, ui-sans-serif, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
             font-size: 14px;
             line-height: 1.5;
         }
+
         .browser-python-button {
-            display: block;
+            float: right;
+            display: inline;
             margin-left: 8px;
             background-color: #fafbfc;
             border-color: rgba(27, 31, 35, 0.15) !important;
@@ -138,28 +146,18 @@
         }
 
         .browser-python {
-            overflow-x: auto;
-            overflow-y: hidden;
-            margin: 0;
-            padding: 0;
-            box-sizing: inherit;
-            display: block;
-            word-wrap: normal;
+            margin-top: 16px !important;
+            position: relative !important;
             background-color: #fff;
-            overflow: auto;
-            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
-            margin-bottom: 1em;
-            font-style: normal;
-            font-weight: normal;
-            line-height: 1.5;
-            cursor: auto;
-            background: #ffffff;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            border: 1px solid;
-            border-color: #ddd #ddd #ccc;
+            border: 1px solid #d0d7de;
             border-radius: 6px;
+            box-sizing: border-box;
+            display: block;
+            word-wrap: break-word;
+            color: #24292f;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI Variable, Segoe UI, system-ui, ui-sans-serif, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+            font-size: 14px;
+            line-height: 1.5;
         }
 
         .browser-python-table {
@@ -171,6 +169,9 @@
             font-weight: 400;
             line-height: 1.4;
             margin: 0;
+            margin-bottom: 2px;
+            margin-left: 1px;
+            margin-right: 1px;
             padding: 0;
             border-spacing: 0;
             display: table;
@@ -195,11 +196,12 @@
             background: transparent;
             padding: 1px 10px !important;
             min-width: inherit;
-            color: rgba(27, 31, 25, 0.3);
+            color: #6e7781;
             cursor: pointer;
             font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
             font-size: 12px;
             line-height: 20px;
+            border-radius: 6px;
             text-align: right;
             user-select: none;
             vertical-align: top;
@@ -218,7 +220,9 @@
             border-collapse: collapse;
             box-sizing: inherit;
             display: table-cell;
-
+            min-width: 50px;
+            padding-left: 10px;
+            padding-right: 10px;
         }
 
         .browser-python-line-text {
@@ -241,29 +245,84 @@
             border-collapse: collapse;
             font-weight: 400;
             border-spacing: 0;
+        }
 
+        .browser-python-body {
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            margin-bottom: -1px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0 !important;
+            border-bottom: 1px solid #d0d7de;
+            box-sizing: border-box;
+            display: block;
+            word-wrap: break-word;
+            color: #24292f;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI Variable, Segoe UI, system-ui, ui-sans-serif, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+            font-size: 14px;
+            line-height: 1.5;
+            background-color: #fff;
+            border-radius: 6px;
+        }
+
+        .browser-python-header-left {
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace !important;
+            font-size: 12px !important;
+            padding-right: 16px !important;
+            order: 1 !important;
+            flex: auto !important;
+            display: block;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            line-height: 1.5;
+            color: #24292f;
+        }
+
+        .browser-python-header-right {
+            display: flex !important;
+            padding-bottom: 0 !important;
+            padding-top: 0 !important;
+            order: 2 !important;
+            flex-grow: 0 !important;
+            justify-content: space-between !important;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            color: #24292e;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI Variable, Segoe UI, system-ui, ui-sans-serif, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        body {
+            width: 600px;
         }
     </style>
 
 </head>
 
-<body style="width: 600px;">
-    <div style="width: 100px;">
-        <a class="browser-python-button" onclick="runit();">Run</a>
-    </div>
+<body>
+
 
     <div class="browser-python">
         <div class="browser-python-header">
-            Powered by Skulpt.
+            <div class=browser-python-header-left>
+                Powered by Skulpt | Timeit: <span id="browser-python-timeit">0.1ms</span>
+            </div>
+            <div class=browser-python-header-right>
+                <span class="browser-python-button" onclick="runit();">Run .py</span>
+            </div>
         </div>
-        <table class="browser-python-table">
-            <tbody id="browser-python-tbody-id" class="browser-python-tbody">
-                <tr class="browser-python-tr">
-                    <td class="browser-python-line-number">0</td>
-                    <td class="browser-python-line-text">Python in the browser: powered by Skulpt!</td>
-                </tr>
-            </tbody>
-        </table>
+        <div id="browser-python-body-id" class="browser-python-body">
+            <table class="browser-python-table">
+                <tbody id="browser-python-tbody-id" class="browser-python-tbody">
+                    <tr class="browser-python-tr">
+                        <td class="browser-python-line-number">0</td>
+                        <td class="browser-python-line-text">Python in the browser: powered by Skulpt!</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 
