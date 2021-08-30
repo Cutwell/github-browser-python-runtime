@@ -1,0 +1,31 @@
+{
+    "name": "github-browser-python-runtime",
+    "version": "1.0",
+    "description": "Run .py files locally in the browser",
+    "permissions": [
+        "declarativeContent"
+    ],
+    "page_action": {
+        "default_icon": {
+            "48": "data/img/icon48.png",
+            "128": "data/img/icon128.png"
+        }
+    },
+    "icons": {
+        "48": "data/img/icon48.png",
+        "128": "data/img/icon128.png"
+    },
+    "content_scripts": [
+        {
+            "js": [
+                "data/skulpt/skulpt.min.js",
+                "data/skulpt/skulpt-stdlib.js",
+                "data/js/content.js"
+            ],
+            "matches": [
+                "https://github.com/*"
+            ]
+        }
+    ],
+    "manifest_version": 2
+}

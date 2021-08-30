@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <script src="data/skulpt/skulpt.min.js" type="text/javascript"></script>
+    <script src="data/skulpt/skulpt-stdlib.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        var lineLength = 1;
+
+        // output functions are configurable.  This one just appends some text
+        // to a pre element.
+        function outf(text) {
+            let tbody = document.getElementById("browser-python-tbody-id");
+
+            let tr = document.createElement("tr");
+
+            let td_lineNumber = document.createElement("td");
+            td_lineNumber.className = "browser-python-line-number";
+            td_lineNumber.innerText = lineLength;
+            lineLength++;
+
+            let td_lineText = document.createElement("td");
+            td_lineText.className = "browser-python-line-text";
+            td_lineText.innerText = text;
+
+            tr.append(td_lineNumber);
+            tr.append(td_lineText);
+
+            tbody.append(tr);
+        }
+
+        function builtinRead(x) {
+            if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+                throw "File not found: '" + x + "'";
+            return Sk.builtinFiles["files"][x];
+        }
+
+        // Here's everything you need to run a python program in skulpt
+        // grab the code from your textarea
+        // get a reference to your pre element for output
+        // configure the output function
+        // call Sk.importMainWithBody()
+        function runit() {
+            // text programs
+            var prog = "print('hello world!)"
+
+            // clear output
+            let tbody = document.getElementById("browser-python-tbody-id");
+            tbody.innerHTML = "";
+            lineLength = 1; // reset line counter
+            //Ske.pre = "browser-python-tbody-id"; // unsure what this line achieves in the example code.. if uncommented raises "Ske is not defined" error
+
+            Sk.configure({
+                output: outf,
+                read: builtinRead,
+                __future__: Sk.python3 // enable python3 runtime
+            });
+
+            // uncomment to enable turtle graphics
+            // NOTE: requires additional canvas object in DOM
+            //(Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+
+            var myPromise = Sk.misceval.asyncToPromise(
+                function () {
+                    return Sk.importMainWithBody("<stdin>", false, prog, true);
+                }
+            );
+
+            myPromise.then(
+                function (mod) {
+                    console.log('success');
+                },
+                function (err) {
+                    console.log(err.toString());
+                    outf(err);
+                }
+            );
+        }
+    </script>
+
+    <style>
+        .browser-python-header {
+            background-color: rgba(234, 238, 242, 0.5);
+            border: 1px solid #d0d7de;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            margin: -1px -1px 0;
+            padding: 16px;
+            box-sizing: border-box;
+            display: block;
+            overflow: hidden;
+            word-wrap: break-word;
+            font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .browser-python-button {
+            display: block;
+            margin-left: 8px;
+            background-color: #fafbfc;
+            border-color: rgba(27, 31, 35, 0.15) !important;
+            box-shadow: rgba(27, 31, 35, 0.04), rgba(255, 255, 255, 0.25);
+            color: #24292e;
+            transition: .2s cubic-bezier(.3, 0, .5, 1) !important;
+            transition-property: color, background-color, border-color;
+            appearance: none;
+            border: 1px solid;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            padding: 5px 16px;
+            position: relative;
+            user-select: none;
+            vertical-align: middle;
+            white-space: nowrap;
+            text-decoration: none !important;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+        }
+
+        .browser-python-button:hover {
+            background-color: #f3f4f6;
+            border-color: rgba(27, 31, 35, 0.15) !important;
+            transition-duration: .1s;
+            outline-width: 0;
+            text-decoration: none;
+        }
+
+        .browser-python {
+            overflow-x: auto;
+            overflow-y: hidden;
+            margin: 0;
+            padding: 0;
+            box-sizing: inherit;
+            display: block;
+            word-wrap: normal;
+            background-color: #fff;
+            overflow: auto;
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+            margin-bottom: 1em;
+            font-style: normal;
+            font-weight: normal;
+            line-height: 1.5;
+            cursor: auto;
+            background: #ffffff;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            border: 1px solid;
+            border-color: #ddd #ddd #ccc;
+            border-radius: 6px;
+        }
+
+        .browser-python-table {
+            background: #fff;
+            border: 0;
+            color: #333;
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+            border-spacing: 0;
+            display: table;
+            word-wrap: normal;
+            box-sizing: inherit;
+            border-collapse: collapse;
+        }
+
+        .browser-python-tbody {
+            display: table-row-group;
+            vertical-align: middle;
+            border-color: inherit;
+        }
+
+        .browser-python-tr {
+            display: table-row;
+            vertical-align: inherit;
+            border-color: inherit;
+        }
+
+        .browser-python-line-number {
+            background: transparent;
+            padding: 1px 10px !important;
+            min-width: inherit;
+            color: rgba(27, 31, 25, 0.3);
+            cursor: pointer;
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+            font-size: 12px;
+            line-height: 20px;
+            text-align: right;
+            user-select: none;
+            vertical-align: top;
+            white-space: nowrap;
+            width: 1%;
+            word-wrap: normal;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            border-radius: 6px 6px 0 0;
+            overflow: auto;
+            text-indent: initial;
+            border-spacing: 0;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            border-collapse: collapse;
+            box-sizing: inherit;
+            display: table-cell;
+
+        }
+
+        .browser-python-line-text {
+            border: 0;
+            text-align: left;
+            background: transparent;
+            padding: 1px 10px !important;
+            word-wrap: normal;
+            color: #24292e;
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+            font-size: 12px;
+            overflow: visible;
+            white-space: pre;
+            line-height: 20px;
+            position: relative;
+            vertical-align: top;
+            display: table-cell;
+            margin: 0;
+            box-sizing: inherit;
+            border-collapse: collapse;
+            font-weight: 400;
+            border-spacing: 0;
+
+        }
+    </style>
+
+</head>
+
+<body style="width: 600px;">
+    <div style="width: 100px;">
+        <a class="browser-python-button" onclick="runit();">Run</a>
+    </div>
+
+    <div class="browser-python">
+        <div class="browser-python-header">
+            Powered by Skulpt.
+        </div>
+        <table class="browser-python-table">
+            <tbody id="browser-python-tbody-id" class="browser-python-tbody">
+                <tr class="browser-python-tr">
+                    <td class="browser-python-line-number">0</td>
+                    <td class="browser-python-line-text">Python in the browser: powered by Skulpt!</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
