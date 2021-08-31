@@ -2,13 +2,14 @@ window.addEventListener('load', function () {
     init();
 })
 
+var old = "";
 async function detectURLchange(old, timeout) {
 
-    if (window.location.href !== old) {
+    // detect url change (and wait on document DOM load) (and test DOM directly for content)
+    if (window.location.href !== old && document.readyState === "complete" && !!document.getElementById('blob-path')) {
+        old = window.location.href;
         init();
     }
-
-    old = window.location.href;
 
     setTimeout(() => {
         detectURLchange(old, timeout);
@@ -22,15 +23,19 @@ window.addEventListener('popstate', function (event) {
 }, false);
 
 
-
 // initialise global vars
 var lineLength = 1;
 
 function init() {
-    // test to prevent duplicate elements //
-    let test = !!document.getElementById('browser-python-tbody-id');
+    // run tests //
+    // test for .py page extension
+    let location_extension = window.location.href.split('.');
+    let location_test = (location_extension[location_extension.length-1] == "py");
 
-    if (!test) {
+    // test for 'browser-python-tbody-id'
+    let duplicate_test = !!document.getElementById('browser-python-tbody-id');
+
+    if (location_test & !duplicate_test) {
         // initialise css //
         const browser_python_css = `
 .browser-python-header {
@@ -39,7 +44,6 @@ function init() {
     padding-top: 8px !important;
     padding-right: 8px !important;
     flex-direction: row !important;
-
     flex-shrink: 0 !important;
     align-items: center !important;
     background-color: #f6f8fa;
@@ -374,10 +378,9 @@ function python3BrowserRuntime(code) {
 
     timedPromise.then(
         function (mod) {
-            console.log('success');
+            return;
         },
         function (err) {
-            console.log(err.toString());
             outf(err);
         }
     );
