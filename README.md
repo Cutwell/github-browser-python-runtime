@@ -2,6 +2,8 @@
 
  Run python files from within GitHub file pages.
 
+![manifest shield](https://img.shields.io/badge/Chrome%20Manifest-v2-blue, "manifest shield")
+
 | |
 |:---:|
 | ![chrome web store](github/images/chromewebstore_logo.png "chrome web store") |
