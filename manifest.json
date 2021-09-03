@@ -15,8 +15,8 @@
     "content_scripts": [
         {
             "js": [
-                "data/skulpt/skulpt.min.js",
-                "data/skulpt/skulpt-stdlib.js",
+                "data/js/skulpt/skulpt.min.js",
+                "data/js/skulpt/skulpt-stdlib.js",
                 "data/js/content.js"
             ],
             "css": [
@@ -27,5 +27,5 @@
             ]
         }
     ],
-    "manifest_version": 3
+    "manifest_version": 2
 }
