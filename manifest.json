@@ -19,6 +19,9 @@
                 "data/skulpt/skulpt-stdlib.js",
                 "data/js/content.js"
             ],
+            "css": [
+                "data/css/extension.css"
+            ],
             "matches": [
                 "https://github.com/*"
             ]
