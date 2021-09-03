@@ -1,6 +1,6 @@
-![logo](data/img/icon128.png "logo")
+![Online GitHub Python Interpreter](data/img/icon128.png "Online GitHub Python Interpreter")
 
- Run .py files locally in the browser.
+ Run python files from within GitHub file pages.
 
 | |
 |:---:|
