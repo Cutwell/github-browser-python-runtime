@@ -1,6 +1,6 @@
 {
     "name": "Online GitHub Python Interpreter",
-    "version": "1.1",
+    "version": "1.1.1",
     "description": "Run python files from within GitHub file pages.",
     "page_action": {
         "default_icon": {
@@ -12,11 +12,18 @@
         "48": "data/img/icon48.png",
         "128": "data/img/icon128.png"
     },
+    "background": {
+        "scripts": [
+            "data/js/background.js",
+            "data/js/skulpt/skulpt.min.js",
+            "data/js/skulpt/skulpt-stdlib.js"
+        ],
+        "persistent": false
+    },
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "content_scripts": [
         {
             "js": [
-                "data/js/skulpt/skulpt.min.js",
-                "data/js/skulpt/skulpt-stdlib.js",
                 "data/js/content.js"
             ],
             "css": [

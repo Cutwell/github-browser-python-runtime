@@ -4,9 +4,12 @@ window.addEventListener('load', function () {
 
 var old = "";
 async function detectURLchange(old, timeout) {
+    // test for .py page extension
+    let location_extension = window.location.href.split('.');
+    let location_test = (location_extension[location_extension.length - 1] == "py");
 
     // detect url change (and wait on document DOM load) (and test DOM directly for content)
-    if (window.location.href !== old && document.readyState === "complete" && !!document.getElementById('blob-path')) {
+    if (window.location.href !== old && document.readyState === "complete" && !!document.getElementById('blob-path') && location_test) {
         old = window.location.href;
         init();
     }
@@ -28,14 +31,10 @@ var lineLength = 1;
 
 function init() {
     // run tests //
-    // test for .py page extension
-    let location_extension = window.location.href.split('.');
-    let location_test = (location_extension[location_extension.length-1] == "py");
-
     // test for 'browser-python-tbody-id'
     let duplicate_test = !!document.getElementById('browser-python-tbody-id');
 
-    if (location_test & !duplicate_test) {
+    if (!duplicate_test) {
         // construct the python output terminal //
         let span = document.createElement('a');
         span.classList.add("browser-python-button");
@@ -116,12 +115,6 @@ function outf(text) {
     tbody.append(tr);
 }
 
-function builtinRead(x) {
-    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-        throw "File not found: '" + x + "'";
-    return Sk.builtinFiles["files"][x];
-}
-
 async function getScriptRaw() {
     let tbodyList = document.getElementsByTagName('tbody');
     let tbody = tbodyList[1];
@@ -138,31 +131,17 @@ function python3BrowserRuntime(code) {
     tbody.innerHTML = "";
     lineLength = 1; // reset line counter
 
-    Sk.configure({
-        output: outf,
-        read: builtinRead,
-        __future__: Sk.python3 // enable python3 runtime
+    // open connection to backend
+    let port = chrome.runtime.connect({ name: "skulpt" });
+
+    // post code for eval
+    port.postMessage({ code: code });
+
+    // listen for async responses
+    port.onMessage.addListener(function (response) {
+        console.log(response.outf);
+        if (response.hasOwnProperty('outf')) {
+            outf(response.outf);
+        }
     });
-
-    var timedPromise = Sk.misceval.asyncToPromise(
-        function () {
-            let start = performance.now();
-            let returnValue = Sk.importMainWithBody("<stdin>", false, code, true);
-            let elapsed = performance.now() - start;
-
-            let timeit = document.getElementById('browser-python-timeit');
-            timeit.innerText = elapsed.toFixed(2) + "ms";
-
-            return returnValue;
-        }
-    );
-
-    timedPromise.then(
-        function (mod) {
-            return;
-        },
-        function (err) {
-            outf(err);
-        }
-    );
 }
