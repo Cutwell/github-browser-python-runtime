@@ -1,5 +1,5 @@
 print("hello world")
 
-i = input("this prints after execution")
+#i = input("this prints after execution")
 
-print(f"input = {i}")
+#print(f"input = {i}")
